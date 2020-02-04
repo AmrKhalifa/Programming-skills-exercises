@@ -26,5 +26,6 @@ class EnglishRuler():
 			self._draw_interval(self._major_length-1)
 			self._draw_line(self._major_length, label = str(i))
 
-ruler = EnglishRuler(3, 3)
-ruler.draw()
+#ruler = EnglishRuler(3, 3)
+#ruler.draw()
+
