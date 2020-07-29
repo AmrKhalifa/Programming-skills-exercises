@@ -25,12 +25,16 @@ class BinaryTree:
 
 
 	def _preorder(self): 
-		def _recursive_preorder(node, d = 0): 
-			if node: 
-				print('-'*d,'>', node)
-				_recursive_preorder(node.left, d+3)
-				_recursive_preorder(node.right, d+3)
-		_recursive_preorder(self.root)
+		def _recursive_preorder(node, d = 0, arr = None): 
+			if node:
+
+				print('-'*d,'>', ''.join([str(item)+"." for item in arr]), node)
+				arr.append(0)
+				_recursive_preorder(node.left,d+3, arr)
+				arr[-1] +=1 
+				_recursive_preorder(node.right, d+3, arr)
+				arr.pop() 
+		_recursive_preorder(self.root, arr = [1])
 
 	def _postorder(self): 
 		def _recursive_postorder(node): 
@@ -50,12 +54,12 @@ class BinaryTree:
 				
 		_recursive_inorder(self.root)
 
-tree = BinaryTree(root_value = 1)
-tree.root.left = tree._Node(2)
-tree.root.right = tree._Node(3)
-tree.root.left.left = tree._Node(4)
-tree.root.left.right = tree._Node(5)
-tree.root.right.left = tree._Node(6)
-tree.root.right.right = tree._Node(7)
+tree = BinaryTree(root_value = "chapter 1")
+tree.root.left = tree._Node("section A")
+tree.root.right = tree._Node("section B")
+tree.root.left.left = tree._Node("subsection i")
+tree.root.left.right = tree._Node("subsection ii")
+tree.root.right.left = tree._Node("subsection i")
+tree.root.right.right = tree._Node("subsection ii")
 
 tree.traverse(traversal='pre')
