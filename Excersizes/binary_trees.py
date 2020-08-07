@@ -27,7 +27,6 @@ class BinaryTree:
 	def _preorder(self): 
 		def _recursive_preorder(node, d = 0, arr = None): 
 			if node:
-
 				print('-'*d,'>', ''.join([str(item)+"." for item in arr]), node)
 				arr.append(0)
 				_recursive_preorder(node.left,d+3, arr)
@@ -40,7 +39,7 @@ class BinaryTree:
 		def _recursive_postorder(node): 
 			if node:
 				_recursive_postorder(node.left)
-				_recursive_postorder(node.right) 
+				_recursive_postorder(node.right)
 				print(node, end = '->')
 		_recursive_postorder(self.root)
 
