@@ -1,4 +1,5 @@
 import pygame 
+import time 
 
 # Part-A initialtion 
 
@@ -26,7 +27,17 @@ carImage = pygame.image.load('racecar.png')
 def car(x, y): 
 	gameDisplay.blit(carImage, (x, y))
 
+def text_objects(text, font, color):
+	text_surface = font.render(text, True, color)
+	return text_surface, text_surface.get_rect() 
 
+def message_display(text):
+	large_font = pygame.font.Font('freesansbold.ttf', 50)
+	text_surf, text_rect = text_objects(text, large_font, black)
+	text_rect.center = ((display_width//2), (display_height//2))
+	gameDisplay.blit(text_surf, text_rect)
+	pygame.display.update()
+	time.sleep(1)
 
 # Part-c game loop 
 
@@ -65,15 +76,19 @@ def game_loop():
 		if car_x > display_width - 65:
 			car_x = display_width - 65
 			gameDisplay.fill(red)
+			message_display("you bumbed the wall")
 		if car_x <0:
 			car_x = 0
 			gameDisplay.fill(red)
+			message_display("you bumbed the wall")
 		if car_y > display_height - 75:
 			car_y = display_height  - 75
 			gameDisplay.fill(red)
+			message_display("you bumbed the wall")
 		if car_y < 0:
 			car_y = 0
 			gameDisplay.fill(red)
+			message_display("you bumbed the wall")
 
 		
 		car(car_x, y = car_y) 
