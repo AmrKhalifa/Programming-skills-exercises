@@ -1,6 +1,8 @@
 import pygame 
 import random 
 import time 
+import math 
+
 
 class Game:
     def __init__(self): 
@@ -64,26 +66,37 @@ class Game:
         Exit = False
         stopPlaying = False 
         self.gameDisplay.fill(self.WHITE)
-        while not Exit:
-            self.build_grid() 
+        while not Exit and not stopPlaying:
+            self.build_grid()
+            if self.is_winning_configuration(self._BOARD, 1): 
+                print('X WON!')
+                stopPlaying = True
+                time.sleep(5)
+            if self.is_winning_configuration(self._BOARD, 2): 
+                print('Computer WON!')
+                stopPlaying = True
+                time.sleep(5)
+
+            if self.is_draw(self._BOARD):
+                print('Draw Game')
+                stopPlaying = True
+                time.sleep(5)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     Exit = True
                 if event.type == pygame.MOUSEBUTTONDOWN and not stopPlaying: 
                     player_index = self.get_user_input(event)
+                    if self._BOARD[player_index] is not None:
+                        continue 
                     self._BOARD[player_index] = 'X'
-                    x_wins = self.is_winning_configuration(1)
-                    y_wins = self.is_winning_configuration(2)
-
                     self.show_on_board()
+
+
                     comp_index = self.computer_play()
                     if comp_index is not None: 
                         self._BOARD[comp_index] = 'O'
-                        x_wins = self.is_winning_configuration(1, self._BOARD)
-                        y_wins = self.is_winning_configuration(2, self._BOARD)
-
-                        print(self.is_draw(self._BOARD))
-                    
+        
                     else:
                         print('Game Over')
                         stopPlaying = True 
@@ -103,7 +116,7 @@ class Game:
         return index
 
 
-    def is_winning_configuration(self, board,player):
+    def is_winning_configuration(self, board, player):
         def get_cols(seq):
             new_seq = list(seq)
             x = [new_seq[i:i + 3] for i in range(0, len(new_seq), 3)] 
@@ -137,31 +150,63 @@ class Game:
         return winning
 
 
-        def static_evaluation(self, board):
-            if self.is_winning_configuration(board, 1):
-                return 1
-            if self.is_winning_configuration(board, 2):
-                return -1
-            if self.is_draw(board):
-                return 0 
+    def static_evaluation(self, board):
+        if self.is_winning_configuration(board, 1):
+            return -1
+        if self.is_winning_configuration(board, 2):
+            return 1
+        if self.is_draw(board):
+            return 0
 
-        def is_draw(self, board): 
-            cond_1 = not self.is_winning_configuration(baord, 1) and not self.is_winning_configuration(2)
-            cond_2 = all(item is not None for item in board) 
-
-            return cond_1 and cond_2 
-
+    def is_draw(self, board): 
+        cond_1 = self.is_winning_configuration(board, 1) or self.is_winning_configuration(board, 2)
+        cond_2 = all(item is not None for item in board) 
+        return (not cond_1) and (cond_2) 
 
     def computer_play(self):
-        empty_locations = [i for i, item in enumerate(self._BOARD) if item is None]
-        if len(empty_locations)>0: 
-            index = random.choice(empty_locations)
-            return index 
-        return None 
+        best_location = None
+        max_value = -math.inf
+        for location in self.get_empty_locations(self._BOARD): 
+            child = list(self._BOARD)
+            child[location] = 'O'
+            value = self.minimax(child, maximizing = False)
+            if value > max_value:
+                max_value = value
+                best_location = location
+        return best_location
+
+
+    def get_empty_locations(self, board): 
+        empty_locations = [i for i, item in enumerate(board) if item is None]
+        return empty_locations 
+
+    def minimax(self, board, maximizing): 
+        if self.static_evaluation(board) is not None:
+            return self.static_evaluation(board)
+
+        if maximizing:
+            max_eval = -math.inf
+            for location in self.get_empty_locations(board):
+                child = list(board) 
+                child[location] = 'O'
+                val = self.minimax(child, maximizing = False)
+                max_eval = max(max_eval, val)
+            return max_eval
+        else:
+            min_eval = math.inf
+            for location in self.get_empty_locations(board):
+                child = list(board)
+                child[location] = 'X'
+                val = self.minimax(child, maximizing = True)
+                min_eval = min(min_eval, val)
+            return min_eval
+        pass
+
+    def get_best_location(self, board_1, board_2):
+        return [i for i, (x, y) in enumerate(zip(board_1, board_2)) if x!= y]
 
 
 b = Game()
 
 b.main_loop()
-
-# class Game: 
+ 
