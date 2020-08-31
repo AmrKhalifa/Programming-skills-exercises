@@ -1,9 +1,5 @@
-arr =['X', 'X', 'X']
+x = [i for i in range(10)]
 
-#print(all(arr) == X')
+print(x)
 
-#print(all(arr) == "X")
-
-arr2 = [i for i in range(10, 20)]
-
-print(all(item is not None for item in arr))
+print(list(x))
