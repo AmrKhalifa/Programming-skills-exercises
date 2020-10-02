@@ -1,14 +1,14 @@
-import numpy as np 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+import tensorflow as tf 
 
 
+tensor = tf.constant([5,2, 3])
 
-arr = np.array([[1,2,4], [2,4,6], [4,6,8]])
+print(tensor)
+print(f'I am the argmax {tf.math.argmax(tensor)}')
+print(type(int(tf.math.argmax(tensor))))
+t = tensor.numpy() 
 
-u, _ = np.linalg.eigh(arr)
-u = list(reversed(u))
-
-print(u)
-
-
-print(arr.shape[0])
-print(np.eye(arr.shape[0]))
+print(t)
+print(t.argsort())
