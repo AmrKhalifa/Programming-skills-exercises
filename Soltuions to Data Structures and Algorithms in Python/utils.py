@@ -1,9 +1,5 @@
 
 
-
-
-
-
 class _DoublyLinkedBase:
     class _Node:
         __slots__='_element', '_prev', '_next'
